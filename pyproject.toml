@@ -1,0 +1,88 @@
+[tool.poetry]
+name = "effective-mobile-test"
+version = "0.1.0"
+description = ""
+authors = ["Ivan Grakov <ivan.grakov@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.14"
+django = ">=6.0.4,<6.1"
+django-cors-headers = "^4.9.0,<5.0.0"
+djangorestframework = "^3.17.1"
+djangorestframework-simplejwt = "^5.5.1,<6.0.0"
+environs = {extras = ["django"], version = "^15.0.1"}
+django-filter = "^25.2"
+psycopg = "^3.3.3"
+gunicorn = "^25.3.0"
+drf-spectacular = "^0.29.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.3"
+pytest-django = "^4.12.0"
+factory-boy = "^3.3.3"
+ruff = "^0.15.12"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "effective_mobile_test.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+
+# -----------------------------
+# Ruff configuration
+# -----------------------------
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+
+exclude = [
+    ".git",
+    "__pycache__",
+    "**/migrations/*",
+    ".venv",
+    "**/manage.py"
+]
+
+[tool.ruff.lint]
+select = [
+    "A",    # flake8-builtins
+    "ANN",  # flake8-annotations
+    "ARG",  # flake8-unused-arguments
+    "ASYNC",# flake8-async
+    "B",    # flake8-bugbear
+    "BLE",  # blind exceptions
+    "C4",   # flake8-comprehensions
+    "COM",  # flake8-commas
+    "DJ",   # flake8-django
+    "DTZ",  # flake8-datetimez
+    "E",    # pycodestyle
+    "EM",   # format exception messages
+    "ERA",  # commented code
+    "F",    # pyflakes
+    "FAST", # fastAPI
+    "FLY",  # expression instead of string join
+    "I",    # imports
+    "N",    # pep8 naming
+    "PERF", # perflint
+    "PLC",  # errors
+    "PLR",  # refactor
+    "PLW",  # warnings
+    "PTH",  # flake8-use-pathlib
+    "PIE",  # flake8-pie
+    "Q",    # flake8-quotes
+    "RET",  # flake8-return
+    "RUF",  # ruff
+    "S",    # flake8-bandit
+    "SIM",  # flake8-simplify
+    "T10",  # flake8-debugger
+    "T20",  # flake8-print
+    "TRY",  # tryceratops
+    "W",    # warnings
+]
+
+[tool.ruff.format]
+quote-style = "sigle"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = 120
