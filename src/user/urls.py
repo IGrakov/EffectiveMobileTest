@@ -18,12 +18,12 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
     path("refresh-token/", TokenRefreshView.as_view(), name="refresh-token"),
     path(
-        "<slug:username>/change-email/",
+        "change-email/",
         ChangeEmailView.as_view(),
         name="change-email",
     ),
     path(
-        "<slug:username>/change-password/",
+        "change-password/",
         ChangePasswordView.as_view(),
         name="change-password",
     ),

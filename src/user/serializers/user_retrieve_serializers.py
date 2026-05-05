@@ -29,6 +29,8 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
 
 
 class UserListSerializer(UserRetrieveSerializer):
+    date_joined = serializers.DateTimeField(source="created_at", read_only=True, format="%Y-%m-%d")
+
     class Meta(UserRetrieveSerializer.Meta):
         fields = (
             *UserRetrieveSerializer.Meta.fields,

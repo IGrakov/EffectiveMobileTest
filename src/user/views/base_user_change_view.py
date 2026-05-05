@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
@@ -20,17 +20,15 @@ class BaseUserChangeView(APIView):
             },
         },
     )
-    def post(self, request: Request, username: str) -> Response:
+    def post(self, request: Request) -> Response:
         user = request.user
-        if username != user.username:
-            raise PermissionDenied()
 
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         password = serializer.validated_data[self.password_check_key]
         if not user.check_password(password):
-            raise PermissionDenied(
+            raise ValidationError(
                 {self.password_check_key: "Invalid password"},
             )
 
@@ -38,7 +36,7 @@ class BaseUserChangeView(APIView):
 
         return Response(
             {
-                "detail": f"{self.update_field.capitalize()} updated successfully",  # noqa: E501
+                "detail": f"{self.update_field.capitalize()} updated successfully",
             },
             status=status.HTTP_200_OK,
         )
