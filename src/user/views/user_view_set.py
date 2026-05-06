@@ -5,6 +5,7 @@ from django.db.models import QuerySet
 from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import serializers
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.mixins import (
     CreateModelMixin,
     DestroyModelMixin,
@@ -18,8 +19,9 @@ from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
 from rest_framework.viewsets import GenericViewSet
 
+from user import constants
 from user.models import User
-from user.permissions import CanManageUser, IsAdmin
+from user.permissions import CanChangeRole, CanManageUser, IsAdmin
 from user.serializers import (
     ChangeRoleSerializer,
     UserCreateSerializer,
@@ -57,8 +59,11 @@ class UserViewSet(
         if self.action == "list":
             return (IsAdmin(),)
 
-        if self.action in ["retrieve", "update", "partial_update", "destroy", "change_role"]:
-            return IsAuthenticated(), CanManageUser()
+        if self.action in ["retrieve", "update", "partial_update", "destroy"]:
+            return (CanManageUser(),)
+
+        if self.action == "change_role":
+            return (CanChangeRole(),)
 
         return (IsAuthenticated(),)
 
@@ -93,6 +98,9 @@ class UserViewSet(
         serializer.is_valid(raise_exception=True)
 
         role = serializer.validated_data["role"]
+
+        if role == constants.Roles.ADMIN and not self.request.user.is_superuser:
+            raise PermissionDenied("Only superuser can assign admin role")  # noqa: EM101, TRY003
 
         user.groups.clear()
         group, _ = Group.objects.get_or_create(name=role)
