@@ -51,7 +51,6 @@ def test_admin_user_delete_self_or_another_user_with_permissions_success(
         ("super_user", "another_super_user", status.HTTP_403_FORBIDDEN),
         ("admin_user", "super_user", status.HTTP_404_NOT_FOUND),
         ("admin_user", "another_admin_user", status.HTTP_403_FORBIDDEN),
-        ("admin_user", "another_admin_user", status.HTTP_403_FORBIDDEN),
         ("supervisor_user", "super_user", status.HTTP_404_NOT_FOUND),
         ("supervisor_user", "another_supervisor_user", status.HTTP_403_FORBIDDEN),
         ("supervisor_user", "admin_user", status.HTTP_403_FORBIDDEN),
