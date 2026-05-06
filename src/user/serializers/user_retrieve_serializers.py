@@ -18,14 +18,18 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
         )
 
     @extend_schema_field(
-        serializers.ChoiceField(choices=("admin", "staff", "user")),
+        serializers.ChoiceField(choices=("Admin", "Supervisor", "Manager", "Default")),
     )
     def get_role(self, obj: User) -> str:
         if obj.is_superuser:
-            return "admin"
-        if obj.is_staff:
-            return "staff"
-        return "user"
+            return "Admin"
+        if obj.groups.filter(name="Admin").exists():
+            return "Admin"
+        if obj.groups.filter(name="Supervisor").exists():
+            return "Supervisor"
+        if obj.groups.filter(name="Manager").exists():
+            return "Manager"
+        return "Default"
 
 
 class UserListSerializer(UserRetrieveSerializer):

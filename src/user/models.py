@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 from django.db import models
 
 from core.models import TimeStampMixin
-from user import constants
+from user.constants import Roles
 
 
 class UserManager(BaseUserManager):
@@ -19,7 +19,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self.db)
 
-        default_group, _ = Group.objects.get_or_create(name=constants.Roles.DEFAULT)
+        default_group, _ = Group.objects.get_or_create(name=Roles.DEFAULT)
         user.groups.add(default_group)
 
         return user
@@ -31,7 +31,7 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self.db)
 
-        admin_group, _ = Group.objects.get_or_create(name=constants.Roles.ADMIN)
+        admin_group, _ = Group.objects.get_or_create(name=Roles.ADMIN)
         user.groups.clear()
         user.groups.add(admin_group)
 

@@ -4,4 +4,14 @@ from django.db import models
 class Roles(models.TextChoices):
     ADMIN = "Admin", "Admin"
     DEFAULT = "Default", "Default"
+    MANAGER = "Manager", "Manager"
     SUPERVISOR = "Supervisor", "Supervisor"
+
+
+class Ranks(models.IntegerChoices):
+    INACTIVE_USER = -1
+    SUPERUSER = 100
+    ADMIN = 80
+    SUPERVISOR = 50
+    MANAGER = 30
+    DEFAULT_USER = 0
