@@ -10,6 +10,7 @@ from user import constants
 from user.tests.factories import UserFactory
 
 TEST_FIRST_NAME = "Test first name"
+TEST_MIDDLE_NAME = "Test middle name"
 TEST_LAST_NAME = "Test last name"
 TEST_EMAIL = "test@test.com"
 TEST_PASSWORD = "test_pass123"
@@ -105,15 +106,10 @@ def login_user(login_user_payload):
 
 
 @pytest.fixture
-def login_user_api_client(api_client, login_user):
-    api_client.force_authenticate(user=login_user)
-    return api_client
-
-
-@pytest.fixture
 def user_update_payload():
     return {
         "first_name": TEST_FIRST_NAME,
+        "middle_name": TEST_MIDDLE_NAME,
         "last_name": TEST_LAST_NAME,
         "password": TEST_PASSWORD,
     }
@@ -124,4 +120,5 @@ def user_create_payload(user_update_payload):
     return {
         **user_update_payload,
         "email": TEST_EMAIL,
+        "password_repeated": TEST_PASSWORD,
     }

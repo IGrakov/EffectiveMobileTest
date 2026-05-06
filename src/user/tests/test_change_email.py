@@ -13,7 +13,7 @@ def test_change_email_success(auth_client, login_user, login_user_payload):
         CHANGE_EMAIL_URL,
         {
             "email": NEW_EMAIL,
-            "password": login_user_payload.get("password"),
+            "password": login_user_payload["password"],
         },
     )
 
@@ -42,7 +42,7 @@ def test_change_email_already_exists(auth_client, login_user, login_user_payload
         CHANGE_EMAIL_URL,
         {
             "email": default_user.email,
-            "password": login_user_payload.get("password"),
+            "password": login_user_payload["password"],
         },
     )
 

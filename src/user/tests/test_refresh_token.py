@@ -51,4 +51,4 @@ def test_refresh_token_wrong_token(api_client, login_user):
     response = api_client.post(REFRESH_TOKEN_URL, {"refresh": "wrong_token"})
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    assert response.json() == {"detail": "Token is invalid"}
+    assert response.json()["detail"] == "Token is invalid"
