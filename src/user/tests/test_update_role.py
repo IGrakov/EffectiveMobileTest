@@ -7,6 +7,13 @@ from user import constants
 pytestmark = pytest.mark.django_db
 
 
+def test_update_role_endpoint_requires_authentication(api_client):
+    user_update_role_url = reverse("user:user-change-role", kwargs={"pk": 1})
+    response = api_client.post(user_update_role_url, {})
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
 @pytest.mark.parametrize(
     ("actor_fixture", "target_fixture", "new_role"),
     (

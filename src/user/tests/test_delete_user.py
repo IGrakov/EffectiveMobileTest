@@ -7,6 +7,13 @@ from user.models import User
 pytestmark = pytest.mark.django_db
 
 
+def test_delete_user_endpoint_requires_authentication(api_client):
+    user_delete_url = reverse("user:user-detail", kwargs={"pk": 1})
+    response = api_client.delete(user_delete_url)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
 @pytest.mark.parametrize(
     ("actor_fixture", "target_fixture"),
     (
