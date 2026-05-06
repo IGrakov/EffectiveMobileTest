@@ -61,8 +61,18 @@ def super_user():
 
 
 @pytest.fixture
+def another_super_user():
+    return UserFactory(first_name="another superuser", last_name="another superuser", is_superuser=True)
+
+
+@pytest.fixture
 def admin_user():
     return UserFactory(first_name="admin", last_name="admin", role=constants.Roles.ADMIN)
+
+
+@pytest.fixture
+def another_admin_user():
+    return UserFactory(first_name="another admin", last_name="another admin", role=constants.Roles.ADMIN)
 
 
 @pytest.fixture
@@ -71,13 +81,28 @@ def supervisor_user():
 
 
 @pytest.fixture
+def another_supervisor_user():
+    return UserFactory(first_name="another supervisor", last_name="another supervisor", role=constants.Roles.SUPERVISOR)
+
+
+@pytest.fixture
 def manager_user():
     return UserFactory(first_name="manager", last_name="manager", role=constants.Roles.MANAGER)
 
 
 @pytest.fixture
+def another_manager_user():
+    return UserFactory(first_name=" another manager", last_name="another manager", role=constants.Roles.MANAGER)
+
+
+@pytest.fixture
 def default_user():
     return UserFactory(first_name="default", last_name="default", role=constants.Roles.DEFAULT)
+
+
+@pytest.fixture
+def another_default_user():
+    return UserFactory(first_name="another default", last_name="another default", role=constants.Roles.DEFAULT)
 
 
 @pytest.fixture
