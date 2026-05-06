@@ -8,6 +8,12 @@ NEW_PASSWORD = "new_password"
 pytestmark = pytest.mark.django_db
 
 
+def test_change_password_endpoint_requires_authentication(api_client):
+    response = api_client.post(CHANGE_PASSWORD_URL, {})
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
 def test_change_password_success(auth_client, login_user, login_user_payload):
     response = auth_client(login_user).post(
         CHANGE_PASSWORD_URL,
