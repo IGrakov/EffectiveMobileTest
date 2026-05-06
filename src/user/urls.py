@@ -9,10 +9,10 @@ from user.views import (
     UserViewSet,
 )
 
-app_name = "accounts"
+app_name = "user"
 
 router = SimpleRouter()
-router.register("", UserViewSet)
+router.register("", UserViewSet, basename="user")
 
 urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
