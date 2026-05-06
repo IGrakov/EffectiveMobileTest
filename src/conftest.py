@@ -133,17 +133,20 @@ def login_user(login_user_payload):
 @pytest.fixture
 def user_update_payload():
     return {
-        "first_name": TEST_FIRST_NAME,
-        "middle_name": TEST_MIDDLE_NAME,
-        "last_name": TEST_LAST_NAME,
+        "first_name": f"{TEST_FIRST_NAME} updated",
+        "middle_name": f"{TEST_MIDDLE_NAME} updated",
+        "last_name": f"{TEST_LAST_NAME} updated",
         "password": TEST_PASSWORD,
     }
 
 
 @pytest.fixture
-def user_create_payload(user_update_payload):
+def user_create_payload():
     return {
-        **user_update_payload,
+        "first_name": TEST_FIRST_NAME,
+        "middle_name": TEST_MIDDLE_NAME,
+        "last_name": TEST_LAST_NAME,
         "email": TEST_EMAIL,
+        "password": TEST_PASSWORD,
         "password_repeated": TEST_PASSWORD,
     }
