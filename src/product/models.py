@@ -32,3 +32,16 @@ class Product(TimeStampMixin):
         max_length=20,
         choices=UnitType.choices,
     )
+
+
+class Region(TimeStampMixin):
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+
+class ProductAvailability(TimeStampMixin):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+
+    is_active = models.BooleanField(default=True)
+    price_override = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

@@ -33,6 +33,4 @@ class ProductFactory(factory.django.DjangoModelFactory):
         positive=True,
     )
 
-    unit_type = factory.LazyFunction(
-        lambda: random.choice(UnitType.values)
-    )
+    unit_type = factory.LazyFunction(lambda: random.choice(UnitType.values))  # noqa: S311
