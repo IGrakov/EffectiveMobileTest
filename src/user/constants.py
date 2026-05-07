@@ -15,3 +15,9 @@ class Ranks(models.IntegerChoices):
     SUPERVISOR = 50
     MANAGER = 30
     DEFAULT_USER = 0
+
+
+class ProductPermissionType(models.TextChoices):
+    VIEW_PRODUCT = "VIEW_PRODUCT"
+    SEE_QUANTITY = "SEE_QUANTITY"
+    EDIT_PRICE = "EDIT_PRICE"

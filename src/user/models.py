@@ -7,7 +7,8 @@ from django.contrib.auth.models import (
 from django.db import models
 
 from core.models import TimeStampMixin
-from user.constants import Roles
+from product.models import Region
+from user.constants import ProductPermissionType, Roles
 
 
 class UserManager(BaseUserManager):
@@ -54,3 +55,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampMixin):
 
     def __str__(self) -> str:
         return f"{self.first_name} {self.middle_name} {self.last_name}, {self.email}"
+
+
+class UserProductPermission(models.Model):  # noqa: DJ008
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    permission = models.CharField(choices=ProductPermissionType.choices, max_length=20)
+    is_allowed = models.BooleanField(default=True)
