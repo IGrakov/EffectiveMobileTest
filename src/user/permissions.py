@@ -78,3 +78,22 @@ class CanChangeRole(IsAuthenticated):
 
         # only admins and superusers can manage users, only superusers can manage admins
         return actor_rank >= constants.Ranks.ADMIN and actor_rank > target_rank
+
+
+class CanManagePermissions(IsAuthenticated):
+    def has_object_permission(self, request: Request, view: APIView, obj: User) -> bool:  # noqa: ARG002
+        actor = request.user
+
+        # superuser override and can perform actions with deleted (not active) users
+        if actor.is_superuser:
+            return True
+
+        # cannot interact with inactive targets
+        if not obj.is_active:
+            return False
+
+        actor_rank = get_user_role_rank(actor)
+        target_rank = get_user_role_rank(obj)
+
+        # only admins and superusers can manage users, only superusers can manage admins
+        return actor_rank >= constants.Ranks.ADMIN and actor_rank > target_rank

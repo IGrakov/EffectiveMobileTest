@@ -17,7 +17,7 @@ class LoginView(APIView):
     @extend_schema(
         responses={
             200: inline_serializer(
-                name="LogoutResponse",
+                name="LoginResponse",
                 fields={
                     "access": serializers.CharField(),
                     "refresh": serializers.CharField(),

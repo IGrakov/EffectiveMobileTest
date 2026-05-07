@@ -1,10 +1,14 @@
+import random
 from typing import Any, Type
 
 import factory
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 
+from product.tests.factories import RegionFactory
 from user import constants
+from user.constants import ProductPermissionType
+from user.models import UserProductPermission
 
 User = get_user_model()
 
@@ -42,3 +46,12 @@ class UserFactory(factory.django.DjangoModelFactory):
         user.groups.add(group)
 
         return user
+
+
+class UserProductPermissionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = UserProductPermission
+
+    user = factory.SubFactory(UserFactory)
+    region = factory.SubFactory(RegionFactory)
+    permission = factory.LazyFunction(lambda: random.choice(ProductPermissionType.values))  # noqa: S311

@@ -3,7 +3,8 @@ import uuid
 
 import factory
 
-from product.models import Product, UnitType
+from product.constants import Regions
+from product.models import Product, Region, UnitType
 
 
 class ProductFactory(factory.django.DjangoModelFactory):
@@ -34,3 +35,14 @@ class ProductFactory(factory.django.DjangoModelFactory):
     )
 
     unit_type = factory.LazyFunction(lambda: random.choice(UnitType.values))  # noqa: S311
+
+
+class RegionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Region
+
+    code = factory.Iterator(Regions.values)
+
+    @factory.lazy_attribute
+    def name(self) -> str:
+        return Regions(self.code).label

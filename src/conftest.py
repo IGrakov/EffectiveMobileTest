@@ -6,8 +6,9 @@ from django.contrib.auth.models import Group
 from django.core.cache import cache
 from rest_framework.test import APIClient
 
+from product.tests.factories import RegionFactory
 from user import constants
-from user.tests.factories import UserFactory
+from user.tests.factories import UserFactory, UserProductPermissionFactory
 
 TEST_FIRST_NAME = "Test first name"
 TEST_MIDDLE_NAME = "Test middle name"
@@ -150,3 +151,29 @@ def user_create_payload():
         "password": TEST_PASSWORD,
         "password_repeated": TEST_PASSWORD,
     }
+
+
+@pytest.fixture
+def region():
+    def _factory(region_choice):
+        return RegionFactory(name=region_choice.name, code=region_choice.value)
+
+    return _factory
+
+
+@pytest.fixture
+def user_product_permission():
+    def _factory(
+        user,
+        region,
+        permission,
+        is_allowed=True,
+    ):
+        return UserProductPermissionFactory(
+            user=user,
+            region=region,
+            permission=permission,
+            is_allowed=is_allowed,
+        )
+
+    return _factory

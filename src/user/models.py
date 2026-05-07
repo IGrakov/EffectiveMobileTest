@@ -58,7 +58,15 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampMixin):
 
 
 class UserProductPermission(models.Model):  # noqa: DJ008
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="permissions")
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name="permissions")
     permission = models.CharField(choices=ProductPermissionType.choices, max_length=20)
     is_allowed = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=("user", "region", "permission"),
+                name="unique_user_region_permission",
+            ),
+        )

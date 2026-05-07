@@ -6,6 +6,7 @@ from user.serializers.change_role_serializer import ChangeRoleSerializer
 from user.serializers.login_serializer import LoginSerializer
 from user.serializers.logout_serializer import LogoutSerializer
 from user.serializers.user_create_serializer import UserCreateSerializer
+from user.serializers.user_product_permission_serializer import UserProductPermissionSerializer
 from user.serializers.user_retrieve_serializers import (
     UserListSerializer,
     UserRetrieveSerializer,
@@ -20,6 +21,7 @@ __all__ = (
     "LogoutSerializer",
     "UserCreateSerializer",
     "UserListSerializer",
+    "UserProductPermissionSerializer",
     "UserRetrieveSerializer",
     "UserUpdateSerializer",
 )

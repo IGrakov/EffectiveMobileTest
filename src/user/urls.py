@@ -7,6 +7,8 @@ from user.views import (
     ChangePasswordView,
     LoginView,
     LogoutView,
+    UserProductPermissionsView,
+    UserProductPermissionViewSet,
     UserViewSet,
 )
 
@@ -14,8 +16,18 @@ app_name = "user"
 
 router = SimpleRouter()
 router.register("", UserViewSet, basename="user")
+router.register(
+    "product-permission",
+    UserProductPermissionViewSet,
+    basename="user-product-permission",
+)
 
 urlpatterns = [
+    path(
+        "<int:pk>/product-permissions/",
+        UserProductPermissionsView.as_view(),
+        name="user-product-permissions",
+    ),
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("refresh-token/", TokenRefreshView.as_view(), name="refresh-token"),
