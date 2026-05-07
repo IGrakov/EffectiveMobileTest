@@ -9,20 +9,22 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from user.serializers import LoginSerializer
 
-login_response_schema = inline_serializer(
-    name="LoginResponse",
-    fields={
-        "access": serializers.CharField(),
-        "refresh": serializers.CharField(),
-    },
-)
-
 
 class LoginView(APIView):
     serializer_class = LoginSerializer
     permission_classes = (AllowAny,)
 
-    @extend_schema(responses={200: login_response_schema})
+    @extend_schema(
+        responses={
+            200: inline_serializer(
+                name="LogoutResponse",
+                fields={
+                    "access": serializers.CharField(),
+                    "refresh": serializers.CharField(),
+                },
+            ),
+        },
+    )
     def post(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
