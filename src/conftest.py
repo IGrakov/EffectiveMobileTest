@@ -6,8 +6,10 @@ from django.contrib.auth.models import Group
 from django.core.cache import cache
 from rest_framework.test import APIClient
 
+from product import constants as product_constants
 from product.tests.factories import RegionFactory
-from user import constants
+from user import constants as user_constants
+from user.services.product_permission_service import ProductPermissionService
 from user.tests.factories import UserFactory, UserProductPermissionFactory
 
 TEST_FIRST_NAME = "Test first name"
@@ -47,7 +49,7 @@ def fast_password_hashers(settings):
 
 @pytest.fixture(autouse=True)
 def create_roles(db):  # noqa: ARG001
-    for role in constants.Roles:
+    for role in user_constants.Roles:
         Group.objects.get_or_create(name=role)
 
 
@@ -68,42 +70,46 @@ def another_super_user():
 
 @pytest.fixture
 def admin_user():
-    return UserFactory(first_name="admin", last_name="admin", role=constants.Roles.ADMIN)
+    return UserFactory(first_name="admin", last_name="admin", role=user_constants.Roles.ADMIN)
 
 
 @pytest.fixture
 def another_admin_user():
-    return UserFactory(first_name="another admin", last_name="another admin", role=constants.Roles.ADMIN)
+    return UserFactory(first_name="another admin", last_name="another admin", role=user_constants.Roles.ADMIN)
 
 
 @pytest.fixture
 def supervisor_user():
-    return UserFactory(first_name="supervisor", last_name="supervisor", role=constants.Roles.SUPERVISOR)
+    return UserFactory(first_name="supervisor", last_name="supervisor", role=user_constants.Roles.SUPERVISOR)
 
 
 @pytest.fixture
 def another_supervisor_user():
-    return UserFactory(first_name="another supervisor", last_name="another supervisor", role=constants.Roles.SUPERVISOR)
+    return UserFactory(
+        first_name="another supervisor",
+        last_name="another supervisor",
+        role=user_constants.Roles.SUPERVISOR,
+    )
 
 
 @pytest.fixture
 def manager_user():
-    return UserFactory(first_name="manager", last_name="manager", role=constants.Roles.MANAGER)
+    return UserFactory(first_name="manager", last_name="manager", role=user_constants.Roles.MANAGER)
 
 
 @pytest.fixture
 def another_manager_user():
-    return UserFactory(first_name=" another manager", last_name="another manager", role=constants.Roles.MANAGER)
+    return UserFactory(first_name=" another manager", last_name="another manager", role=user_constants.Roles.MANAGER)
 
 
 @pytest.fixture
 def default_user():
-    return UserFactory(first_name="default", last_name="default", role=constants.Roles.DEFAULT)
+    return UserFactory(first_name="default", last_name="default", role=user_constants.Roles.DEFAULT)
 
 
 @pytest.fixture
 def another_default_user():
-    return UserFactory(first_name="another default", last_name="another default", role=constants.Roles.DEFAULT)
+    return UserFactory(first_name="another default", last_name="another default", role=user_constants.Roles.DEFAULT)
 
 
 @pytest.fixture
@@ -155,25 +161,36 @@ def user_create_payload():
 
 @pytest.fixture
 def region():
-    def _factory(region_choice):
+    def _factory(region_choice=product_constants.Regions.EU):
         return RegionFactory(name=region_choice.name, code=region_choice.value)
 
     return _factory
 
 
 @pytest.fixture
-def user_product_permission():
+def grant_user_permissions():
     def _factory(
         user,
         region,
-        permission,
+        permissions,
         is_allowed=True,
     ):
-        return UserProductPermissionFactory(
-            user=user,
-            region=region,
-            permission=permission,
-            is_allowed=is_allowed,
-        )
+        return [
+            UserProductPermissionFactory(
+                user=user,
+                region=region,
+                permission=perm,
+                is_allowed=is_allowed,
+            )
+            for perm in permissions
+        ]
+
+    return _factory
+
+
+@pytest.fixture
+def permission_service():
+    def _factory(user):
+        return ProductPermissionService(user)
 
     return _factory

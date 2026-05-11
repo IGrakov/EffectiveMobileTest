@@ -40,8 +40,25 @@ class Region(TimeStampMixin):
 
 
 class ProductAvailability(TimeStampMixin):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=("product", "region"),
+                name="unique_product_region",
+            ),
+        )
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="availabilities",
+    )
+
+    region = models.ForeignKey(
+        Region,
+        on_delete=models.CASCADE,
+        related_name="product_availabilities",
+    )
 
     is_active = models.BooleanField(default=True)
     price_override = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

@@ -4,7 +4,7 @@ import uuid
 import factory
 
 from product.constants import Regions
-from product.models import Product, Region, UnitType
+from product.models import Product, ProductAvailability, Region, UnitType
 
 
 class ProductFactory(factory.django.DjangoModelFactory):
@@ -46,3 +46,11 @@ class RegionFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def name(self) -> str:
         return Regions(self.code).label
+
+
+class ProductAvailabilityFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ProductAvailability
+
+    product = factory.SubFactory(ProductFactory)
+    region = factory.SubFactory(RegionFactory)

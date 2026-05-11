@@ -35,22 +35,20 @@ def test_retrieve_user_permissions_success(
     actor_fixture,
     target_fixture,
     region,
-    user_product_permission,
+    grant_user_permissions,
 ):
     actor = request.getfixturevalue(actor_fixture)
     target = request.getfixturevalue(target_fixture)
     retrieve_user_permissions_url = reverse("user:user-product-permissions", kwargs={"pk": target.id})
 
     region = region(product_constants.Regions.EU)
-    permission_one = user_product_permission(
+    permission_one, permission_two = grant_user_permissions(
         user=target,
         region=region,
-        permission=constants.ProductPermissionType.VIEW_PRODUCT,
-    )
-    permission_two = user_product_permission(
-        user=target,
-        region=region,
-        permission=constants.ProductPermissionType.EDIT_PRICE,
+        permissions=(
+            constants.ProductPermissionType.VIEW_PRODUCT,
+            constants.ProductPermissionType.EDIT_PRICE,
+        ),
     )
 
     response = auth_client(actor).get(retrieve_user_permissions_url)

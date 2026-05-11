@@ -21,3 +21,10 @@ class ProductPermissionType(models.TextChoices):
     VIEW_PRODUCT = "VIEW_PRODUCT"
     SEE_QUANTITY = "SEE_QUANTITY"
     EDIT_PRICE = "EDIT_PRICE"
+
+
+PRODUCT_PERMISSION_MIN_RANK = {
+    ProductPermissionType.VIEW_PRODUCT: Ranks.DEFAULT_USER,
+    ProductPermissionType.SEE_QUANTITY: Ranks.MANAGER,
+    ProductPermissionType.EDIT_PRICE: Ranks.SUPERVISOR,
+}

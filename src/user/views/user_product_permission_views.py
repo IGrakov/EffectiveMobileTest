@@ -14,6 +14,9 @@ from user.serializers.user_product_permission_serializer import (
 )
 
 
+@extend_schema(
+    tags=["product permissions"],
+)
 class UserProductPermissionViewSet(ModelViewSet):
     serializer_class = UserProductPermissionSerializer
     queryset = UserProductPermission.objects.select_related(
@@ -39,6 +42,7 @@ class UserProductPermissionsView(GenericAPIView):
     permission_classes = (CanManagePermissions,)
 
     @extend_schema(
+        tags=["product permissions"],
         responses=UserPermissionsResponseSerializer,
     )
     def get(self, request: Request, pk: int) -> Response:  # noqa: ARG002
