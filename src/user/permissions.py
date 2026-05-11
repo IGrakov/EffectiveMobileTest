@@ -3,7 +3,7 @@ from rest_framework.request import Request
 from rest_framework.views import APIView
 
 from user import constants
-from user.models import User
+from user.models import User, UserProductPermission
 
 
 def get_user_role_rank(user: User) -> int:
@@ -76,24 +76,26 @@ class CanChangeRole(IsAuthenticated):
         actor_rank = get_user_role_rank(actor)
         target_rank = get_user_role_rank(obj)
 
-        # only admins and superusers can manage users, only superusers can manage admins
+        # only admins and superusers can change roles, only superusers can change roles of admins
         return actor_rank >= constants.Ranks.ADMIN and actor_rank > target_rank
 
 
-class CanManagePermissions(IsAuthenticated):
+class CanManagePermissions(IsAdmin):
     def has_object_permission(self, request: Request, view: APIView, obj: User) -> bool:  # noqa: ARG002
         actor = request.user
+
+        target = obj.user if isinstance(obj, UserProductPermission) else obj
 
         # superuser override and can perform actions with deleted (not active) users
         if actor.is_superuser:
             return True
 
         # cannot interact with inactive targets
-        if not obj.is_active:
+        if not target.is_active:
             return False
 
         actor_rank = get_user_role_rank(actor)
-        target_rank = get_user_role_rank(obj)
+        target_rank = get_user_role_rank(target)
 
-        # only admins and superusers can manage users, only superusers can manage admins
-        return actor_rank >= constants.Ranks.ADMIN and actor_rank > target_rank
+        # only admins and superusers can manage permissions, only superusers can manage permissions of admins
+        return actor_rank > target_rank

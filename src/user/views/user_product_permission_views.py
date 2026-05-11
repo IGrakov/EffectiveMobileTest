@@ -2,10 +2,11 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.generics import GenericAPIView
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import BaseSerializer
 from rest_framework.viewsets import ModelViewSet
 
 from user.models import User, UserProductPermission
-from user.permissions import CanManagePermissions, IsAdmin
+from user.permissions import CanManagePermissions
 from user.serializers import UserProductPermissionSerializer
 from user.serializers.user_product_permission_serializer import (
     UserPermissionsResponseSerializer,
@@ -14,12 +15,22 @@ from user.serializers.user_product_permission_serializer import (
 
 
 class UserProductPermissionViewSet(ModelViewSet):
+    serializer_class = UserProductPermissionSerializer
     queryset = UserProductPermission.objects.select_related(
         "user",
         "region",
     )
-    serializer_class = UserProductPermissionSerializer
-    permission_classes = (IsAdmin,)
+    permission_classes = (CanManagePermissions,)
+
+    def perform_create(self, serializer: BaseSerializer) -> None:
+        target_user = serializer.validated_data["user"]
+
+        self.check_object_permissions(
+            self.request,
+            target_user,
+        )
+
+        serializer.save()
 
 
 class UserProductPermissionsView(GenericAPIView):

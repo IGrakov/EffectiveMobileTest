@@ -15,12 +15,12 @@ from user.views import (
 app_name = "user"
 
 router = SimpleRouter()
-router.register("", UserViewSet, basename="user")
 router.register(
     "product-permission",
     UserProductPermissionViewSet,
     basename="user-product-permission",
 )
+router.register("", UserViewSet, basename="user")
 
 urlpatterns = [
     path(
