@@ -5,6 +5,8 @@ from rest_framework import status
 from product import constants as product_constants
 from user import constants
 
+pytestmark = pytest.mark.django_db
+
 
 def test_retrieve_user_permissions_endpoint_requires_authentication(api_client):
     retrieve_user_permissions_url = reverse("user:user-product-permissions", kwargs={"pk": 1})
