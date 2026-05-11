@@ -1,5 +1,5 @@
 # ==============================================================================
-# ⚙️ КОНФИГУРАЦИЯ
+# ⚙️ CONFIGURATION
 # ==============================================================================
 
 COMPOSE ?= docker compose --env-file .env.dev -f compose.yml -f compose.dev.yml
@@ -16,65 +16,65 @@ EXEC_IT ?= $(COMPOSE) exec -it $(SERVICE)
 
 # 🐳 DOCKER
 
-up: ## 🚀 Запустить локальное окружение
+up: ## 🚀 Launch local environment
 	$(COMPOSE) up
 
-down: ## 🛑 Остановить окружение
+down: ## 🛑 Shut down local environment
 	$(COMPOSE) down
 
-build: ## 🔨 Собрать dev Docker образ
+build: ## 🔨 Build dev Docker image
 	$(COMPOSE) build
 
-rebuild: ## ♻️ Пересобрать и запустить
+rebuild: ## ♻️ Re-build and launch
 	$(COMPOSE) up --build --force-recreate
 
-logs: ## 📋 Смотреть логи контейнера
+logs: ## 📋 See container logs
 	$(COMPOSE) logs -f $(SERVICE)
 
-status: ## 📊 Статус контейнеров
+status: ## 📊 Container status
 	$(COMPOSE) ps
 
-exec: ## 🐚 Открыть shell внутри контейнера
+exec: ## 🐚 Open shell inside container
 	$(EXEC_IT) /bin/sh
 
 
-# 🎨 ЛИНТЕР И ФОРМАТИРОВАНИЕ
+# 🎨 LINTER AND FORMATTING
 
-format: ## 🎨 Проверить форматирование (ruff format --check)
+format: ## 🎨 Check formatting (ruff format --check)
 	$(EXEC) ruff format --check .
 
-lint: ## 🔍 Проверить линтером (ruff check)
+lint: ## 🔍 Check by linter (ruff check)
 	$(EXEC) ruff check .
 
-format-fix: ## ✏️ Исправить форматирование (ruff format)
+format-fix: ## ✏️ Apply formatting (ruff format)
 	$(EXEC) ruff format .
 
-lint-fix: ## ✏️ Исправить ошибки линтера (ruff check --fix)
+lint-fix: ## ✏️ Apply linting (ruff check --fix)
 	$(EXEC) ruff check --fix .
 
 
-# ✅ ТЕСТЫ
+# ✅ TESTS
 
-test: ## ✅ Запустить все тесты
+test: ## ✅ Launch all tests
 	$(EXEC) pytest .
 
-test-cov: ## 📈 Запустить тесты с покрытием
+test-cov: ## 📈 Launch tests with coverage
 	$(EXEC) pytest --cov=. --cov-report=term-missing .
 
 
-# 🗄️ БАЗА ДАННЫХ
+# 🗄️ DATABASE
 
-migrate: ## 🔄 Применить миграции БД
+migrate: ## 🔄 Apply migrations in DB
 	$(EXEC) python manage.py migrate
 
-makemigrations: ## 📝 Создать новые миграции
+makemigrations: ## 📝 Create new migrations
 	$(EXEC) python manage.py makemigrations
 
-db-check: ## 🕵️ Проверить наличие непримененных миграций
+db-check: ## 🕵️ Check is there any unapplied migrations
 	$(EXEC) python manage.py migrate --check
 
-collectstatic: ## 📸 Собрать статические файлы
+collectstatic: ## 📸 Collect static files
 	$(EXEC) python manage.py collectstatic --noinput
 
-shell: ## 🐚 Открыть Django shell
+shell: ## 🐚 Opem Django shell
 	$(EXEC_IT) python manage.py shell
