@@ -24,7 +24,7 @@ services:
     env_file:
       - .env.dev
     networks:
-      - effective-mobile-test
+      - permissions-management-demo
     environment:
       - POSTGRES_HOST=postgres
     volumes:
@@ -35,7 +35,7 @@ services:
     env_file:
       - .env.dev
     networks:
-      - effective-mobile-test
+      - permissions-management-demo
     ports:
       - "5433:5432"
     healthcheck:

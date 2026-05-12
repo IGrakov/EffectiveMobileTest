@@ -5,7 +5,7 @@ services:
     image: web
     container_name: web-migration
     networks:
-      - effective-mobile-test
+      - permissions-management-demo
     entrypoint: ["/bin/sh", "-c", "python manage.py migrate"]
     restart: on-failure
 
@@ -15,7 +15,7 @@ services:
     image: web
     container_name: web-collectstatic
     networks:
-      - effective-mobile-test
+      - permissions-management-demo
     entrypoint: ["/bin/sh", "-c", "python manage.py collectstatic --noinput"]
     depends_on:
       web-migration:
@@ -30,10 +30,10 @@ services:
     image: web
     container_name: web
     networks:
-      - effective-mobile-test
+      - permissions-management-demo
     ports:
       - "8001:8000"
-    entrypoint: ["/bin/sh", "-c", "gunicorn effective_mobile_test.wsgi:application --bind 0.0.0.0:8000 --workers ${WORKERS:-1}"]
+    entrypoint: ["/bin/sh", "-c", "gunicorn permissions_management_demo.wsgi:application --bind 0.0.0.0:8000 --workers ${WORKERS:-1}"]
     depends_on:
       web-collectstatic:
         condition: service_completed_successfully
@@ -46,5 +46,5 @@ services:
     restart: always
 
 networks:
-  effective-mobile-test:
+  permissions-management-demo:
     driver: bridge
